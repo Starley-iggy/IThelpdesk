@@ -1,0 +1,1394 @@
+[
+  {
+    "id": "TKT-001",
+    "title": "No Internet Access",
+    "area": "Networking",
+    "difficulty": 1,
+    "user": "Lisa de Vries",
+    "department": "Finance",
+    "priority": "Medium",
+    "description": "My laptop says it is connected to Wi-Fi, but I cannot open any websites or internal applications.",
+    "symptoms": [
+      "Wi-Fi icon shows connected.",
+      "A nearby colleague has internet access.",
+      "The problem started this morning."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Can another device on the same Wi-Fi access the internet?",
+        "answer": "Yes. Other employees nearby are online.",
+        "why": "This makes a company-wide Wi-Fi outage less likely."
+      },
+      {
+        "id": "q1",
+        "question": "Have you restarted the laptop?",
+        "answer": "Yes, twice. It did not help.",
+        "why": "A simple temporary client issue is less likely."
+      }
+    ],
+    "tools": {
+      "ipconfig": {
+        "name": "ipconfig",
+        "description": "Check the local IP configuration.",
+        "output": "IPv4 Address: 192.168.10.42\nDefault Gateway: 192.168.10.1\nDNS Server: 192.168.10.53",
+        "why": "The PC has an IP, gateway and DNS server."
+      },
+      "gateway": {
+        "name": "ping 192.168.10.1",
+        "description": "Test the local gateway.",
+        "output": "Reply from 192.168.10.1: time=2ms\n4 sent, 4 received, 0 lost",
+        "why": "The PC can reach the local network gateway."
+      },
+      "dns": {
+        "name": "ping 192.168.10.53",
+        "description": "Test the configured DNS server.",
+        "output": "Request timed out.\n4 sent, 0 received, 4 lost",
+        "why": "The configured DNS server cannot be reached."
+      },
+      "lookup": {
+        "name": "nslookup example.com",
+        "description": "Test DNS name resolution.",
+        "output": "DNS request timed out.\nServer: Unknown\nAddress: 192.168.10.53",
+        "why": "Name resolution is failing."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "dns",
+        "name": "DNS configuration/connectivity problem"
+      },
+      {
+        "id": "wifi",
+        "name": "Wi-Fi hardware problem"
+      },
+      {
+        "id": "browser",
+        "name": "Browser problem"
+      },
+      {
+        "id": "router",
+        "name": "Company router outage"
+      }
+    ],
+    "answer": "dns",
+    "explanation": "The PC has a valid IP and can reach its gateway, but DNS traffic fails. That makes DNS the strongest hypothesis."
+  },
+  {
+    "id": "TKT-002",
+    "title": "Computer Extremely Slow",
+    "area": "Windows",
+    "difficulty": 1,
+    "user": "Mark Jansen",
+    "department": "HR",
+    "priority": "Low",
+    "description": "My computer has become extremely slow. Even opening File Explorer takes ages.",
+    "symptoms": [
+      "Applications take a long time to open.",
+      "The issue remains after restarting.",
+      "The slowdown started this morning."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Did restarting fix it?",
+        "answer": "No. It is still slow after restarting.",
+        "why": "A temporary stuck process is less likely."
+      },
+      {
+        "id": "q1",
+        "question": "Did anything change recently?",
+        "answer": "Windows installed an update last night.",
+        "why": "A recent change is worth investigating, but it is not proof of the cause."
+      }
+    ],
+    "tools": {
+      "task": {
+        "name": "Task Manager",
+        "description": "Inspect resource usage.",
+        "output": "Memory: 96%\nCPU: 22%\nDisk: 15%",
+        "why": "Memory pressure is the strongest lead."
+      },
+      "startup": {
+        "name": "Startup Apps",
+        "description": "Check automatic startup programs.",
+        "output": "18 applications enabled at startup.",
+        "why": "Many startup applications can consume memory."
+      },
+      "disk": {
+        "name": "Disk Space",
+        "description": "Check free storage.",
+        "output": "182 GB free of 512 GB.",
+        "why": "Low disk space is not the problem."
+      },
+      "events": {
+        "name": "Event Viewer",
+        "description": "Check recent system errors.",
+        "output": "No critical hardware or disk errors today.",
+        "why": "A major hardware/disk failure is less likely."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "memory",
+        "name": "Memory pressure/background processes"
+      },
+      {
+        "id": "disk",
+        "name": "Low disk space"
+      },
+      {
+        "id": "cpu",
+        "name": "CPU bottleneck"
+      },
+      {
+        "id": "hardware",
+        "name": "Failing storage hardware"
+      }
+    ],
+    "answer": "memory",
+    "explanation": "Memory is at 96% while CPU and disk are low. The evidence points to memory pressure/background processes."
+  },
+  {
+    "id": "TKT-003",
+    "title": "VPN Will Not Connect",
+    "area": "Networking",
+    "difficulty": 2,
+    "user": "Sophie Bakker",
+    "department": "Sales",
+    "priority": "High",
+    "description": "I am working from home and the company VPN refuses to connect.",
+    "symptoms": [
+      "Normal websites work.",
+      "VPN worked yesterday.",
+      "The error says authentication failed."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Can you browse normal websites?",
+        "answer": "Yes, normal websites work.",
+        "why": "General internet connectivity is probably fine."
+      },
+      {
+        "id": "q1",
+        "question": "Did you recently change your password?",
+        "answer": "Yes, this morning.",
+        "why": "Credential changes can affect saved VPN credentials."
+      }
+    ],
+    "tools": {
+      "vpn": {
+        "name": "VPN Client",
+        "description": "Inspect VPN connection details.",
+        "output": "Connection failed: Authentication rejected.",
+        "why": "The VPN server is reachable enough to reject authentication."
+      },
+      "clock": {
+        "name": "System Time",
+        "description": "Check system time.",
+        "output": "Local time is 7 minutes behind the domain time.",
+        "why": "Large clock differences can cause authentication problems."
+      },
+      "dns": {
+        "name": "nslookup vpn.company.local",
+        "description": "Resolve the VPN endpoint.",
+        "output": "Name resolved to 10.20.0.15.",
+        "why": "DNS is working."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "credentials",
+        "name": "Saved credentials/password issue"
+      },
+      {
+        "id": "internet",
+        "name": "Home internet failure"
+      },
+      {
+        "id": "dns",
+        "name": "DNS failure"
+      },
+      {
+        "id": "adapter",
+        "name": "Network adapter failure"
+      }
+    ],
+    "answer": "credentials",
+    "explanation": "Internet and DNS work, while the VPN specifically rejects authentication after a password change."
+  },
+  {
+    "id": "TKT-004",
+    "title": "Printer Not Printing",
+    "area": "Peripherals",
+    "difficulty": 1,
+    "user": "Ahmed El Amrani",
+    "department": "Operations",
+    "priority": "Medium",
+    "description": "The printer shows as available, but my documents stay stuck in the print queue.",
+    "symptoms": [
+      "Printer is powered on.",
+      "Other employees can print.",
+      "Three jobs are stuck in the queue."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Can another employee print?",
+        "answer": "Yes.",
+        "why": "The printer itself is probably operational."
+      },
+      {
+        "id": "q1",
+        "question": "How many jobs are stuck?",
+        "answer": "Three jobs from this PC.",
+        "why": "The problem may be local to this workstation."
+      }
+    ],
+    "tools": {
+      "printer": {
+        "name": "Printer Status",
+        "description": "Check printer state.",
+        "output": "Status: Ready\nConnection: Online",
+        "why": "The printer is online."
+      },
+      "queue": {
+        "name": "Print Queue",
+        "description": "Inspect queued jobs.",
+        "output": "Job 1: Error\nJob 2: Printing\nJob 3: Pending",
+        "why": "A failed job may be blocking later jobs."
+      },
+      "spooler": {
+        "name": "Print Spooler",
+        "description": "Check Windows print service.",
+        "output": "Service status: Running",
+        "why": "The spooler is running."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "queue",
+        "name": "Corrupted/stuck local print queue"
+      },
+      {
+        "id": "printer",
+        "name": "Printer hardware failure"
+      },
+      {
+        "id": "network",
+        "name": "Printer network outage"
+      },
+      {
+        "id": "spooler",
+        "name": "Print Spooler stopped"
+      }
+    ],
+    "answer": "queue",
+    "explanation": "Other users can print, the printer is online, and this PC has a failed job blocking the queue."
+  },
+  {
+    "id": "TKT-005",
+    "title": "Account Locked",
+    "area": "Accounts",
+    "difficulty": 1,
+    "user": "Emma Visser",
+    "department": "Finance",
+    "priority": "Medium",
+    "description": "I cannot sign in to my company account. It says the account is locked.",
+    "symptoms": [
+      "The password was recently changed.",
+      "The user can sign in to their phone.",
+      "The desktop reports account locked."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Did you recently change your password?",
+        "answer": "Yes, yesterday.",
+        "why": "Old saved credentials can continue trying to authenticate."
+      },
+      {
+        "id": "q1",
+        "question": "Are you signed in anywhere else?",
+        "answer": "Yes, Outlook is still open on my old laptop.",
+        "why": "Another device may be using the old password."
+      }
+    ],
+    "tools": {
+      "identity": {
+        "name": "Account Status",
+        "description": "Check directory status.",
+        "output": "Account: LOCKED\nFailed attempts: 7",
+        "why": "The account is locked after repeated failed authentication."
+      },
+      "sessions": {
+        "name": "Active Sessions",
+        "description": "Check signed-in devices.",
+        "output": "Old laptop: connected\nPhone: connected",
+        "why": "The old laptop is still active."
+      },
+      "logs": {
+        "name": "Authentication Logs",
+        "description": "Inspect recent failures.",
+        "output": "7 failures from OLD-LAPTOP-23.",
+        "why": "The old laptop is generating the failures."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "olddevice",
+        "name": "Old device using old password"
+      },
+      {
+        "id": "server",
+        "name": "Authentication server failure"
+      },
+      {
+        "id": "username",
+        "name": "Wrong username"
+      },
+      {
+        "id": "network",
+        "name": "Network outage"
+      }
+    ],
+    "answer": "olddevice",
+    "explanation": "Authentication logs point directly to the old laptop repeatedly attempting the old password."
+  },
+  {
+    "id": "TKT-006",
+    "title": "Shared Drive Access Denied",
+    "area": "Permissions",
+    "difficulty": 2,
+    "user": "Daan Smit",
+    "department": "Marketing",
+    "priority": "Medium",
+    "description": "I can see the shared drive, but I get Access Denied when opening the Marketing folder.",
+    "symptoms": [
+      "The shared drive appears in Explorer.",
+      "Other Marketing users can open the folder.",
+      "The user recently moved teams."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Did you recently change departments?",
+        "answer": "Yes, I moved from HR to Marketing last week.",
+        "why": "Group membership may not have updated."
+      },
+      {
+        "id": "q1",
+        "question": "Can a colleague access the folder?",
+        "answer": "Yes.",
+        "why": "The share itself is working."
+      }
+    ],
+    "tools": {
+      "whoami": {
+        "name": "whoami /groups",
+        "description": "Check directory group membership.",
+        "output": "Groups: HR-Users, All-Employees\nMissing: Marketing-Users",
+        "why": "The expected Marketing group is missing."
+      },
+      "permissions": {
+        "name": "Folder Permissions",
+        "description": "Inspect effective permissions.",
+        "output": "Marketing folder: Marketing-Users = Modify",
+        "why": "Access is controlled by the missing group."
+      },
+      "share": {
+        "name": "Share Status",
+        "description": "Check share availability.",
+        "output": "Online / reachable",
+        "why": "The share is functioning."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "group",
+        "name": "Missing Marketing group membership"
+      },
+      {
+        "id": "server",
+        "name": "File server failure"
+      },
+      {
+        "id": "network",
+        "name": "Network outage"
+      },
+      {
+        "id": "folder",
+        "name": "Folder deleted"
+      }
+    ],
+    "answer": "group",
+    "explanation": "The folder is online and permissions are granted to Marketing-Users, but the user is not in that group."
+  },
+  {
+    "id": "TKT-007",
+    "title": "Outlook Not Syncing",
+    "area": "Microsoft 365",
+    "difficulty": 2,
+    "user": "Nora de Jong",
+    "department": "Management",
+    "priority": "High",
+    "description": "New emails are not appearing in Outlook, but I can see them on my phone.",
+    "symptoms": [
+      "Phone receives new messages.",
+      "Outlook desktop shows old mail.",
+      "Internet browsing works."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Can you see new mail in webmail?",
+        "answer": "Yes.",
+        "why": "The mailbox itself is working."
+      },
+      {
+        "id": "q1",
+        "question": "Does Outlook show Working Offline?",
+        "answer": "Yes, I did not notice that.",
+        "why": "Outlook may simply be disconnected."
+      }
+    ],
+    "tools": {
+      "outlook": {
+        "name": "Outlook Connection",
+        "description": "Inspect connection state.",
+        "output": "Working Offline\nLast successful sync: 08:14",
+        "why": "Outlook is disconnected."
+      },
+      "network": {
+        "name": "Network Test",
+        "description": "Test internet connectivity.",
+        "output": "Internet: Connected",
+        "why": "The PC has internet access."
+      },
+      "service": {
+        "name": "Microsoft 365 Status",
+        "description": "Check service health.",
+        "output": "Exchange Online: Operational",
+        "why": "A cloud outage is unlikely."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "offline",
+        "name": "Outlook is in Offline mode"
+      },
+      {
+        "id": "m365",
+        "name": "Microsoft 365 outage"
+      },
+      {
+        "id": "internet",
+        "name": "PC internet failure"
+      },
+      {
+        "id": "mailbox",
+        "name": "Mailbox deleted"
+      }
+    ],
+    "answer": "offline",
+    "explanation": "The mailbox works elsewhere and Outlook explicitly reports Working Offline."
+  },
+  {
+    "id": "TKT-008",
+    "title": "Teams Microphone Not Working",
+    "area": "Applications",
+    "difficulty": 1,
+    "user": "Thomas Visser",
+    "department": "Consulting",
+    "priority": "Low",
+    "description": "People cannot hear me in Teams meetings.",
+    "symptoms": [
+      "Headphones are connected.",
+      "Speakers work.",
+      "Teams shows the microphone but no input."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Does the microphone work in another app?",
+        "answer": "Yes, Windows Voice Recorder works.",
+        "why": "The hardware is probably functional."
+      },
+      {
+        "id": "q1",
+        "question": "Is the Teams microphone muted?",
+        "answer": "The Teams mic icon is not muted.",
+        "why": "Look for device selection/permissions next."
+      }
+    ],
+    "tools": {
+      "teams": {
+        "name": "Teams Device Settings",
+        "description": "Check selected microphone.",
+        "output": "Microphone: Laptop Microphone\nInput level: 0%",
+        "why": "Teams is selecting the wrong microphone."
+      },
+      "windows": {
+        "name": "Windows Sound Settings",
+        "description": "Inspect input device.",
+        "output": "Headset Microphone: Connected\nPermission: Allowed",
+        "why": "Windows sees the correct microphone."
+      },
+      "device": {
+        "name": "Device Manager",
+        "description": "Check hardware state.",
+        "output": "Headset microphone: Device working properly",
+        "why": "The hardware is functioning."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "teamsdevice",
+        "name": "Teams selected the wrong microphone"
+      },
+      {
+        "id": "hardware",
+        "name": "Broken microphone"
+      },
+      {
+        "id": "permission",
+        "name": "Windows microphone permission blocked"
+      },
+      {
+        "id": "network",
+        "name": "Network issue"
+      }
+    ],
+    "answer": "teamsdevice",
+    "explanation": "The headset works in Windows and permissions are allowed, but Teams is selecting the laptop microphone with no input."
+  },
+  {
+    "id": "TKT-009",
+    "title": "USB Device Not Recognized",
+    "area": "Hardware",
+    "difficulty": 2,
+    "user": "Yara Mulder",
+    "department": "Design",
+    "priority": "Low",
+    "description": "My USB security key is not detected by the computer.",
+    "symptoms": [
+      "The USB key works on another PC.",
+      "Other USB devices work on this PC.",
+      "The issue started after a Windows update."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Have you tried another USB port?",
+        "answer": "Yes, three ports.",
+        "why": "A single bad port is unlikely."
+      },
+      {
+        "id": "q1",
+        "question": "Does the device work elsewhere?",
+        "answer": "Yes.",
+        "why": "The USB key itself is likely fine."
+      }
+    ],
+    "tools": {
+      "device": {
+        "name": "Device Manager",
+        "description": "Inspect USB devices.",
+        "output": "Unknown USB Device (Device Descriptor Request Failed)",
+        "why": "The USB controller reports a device error."
+      },
+      "events": {
+        "name": "Event Viewer",
+        "description": "Check USB errors.",
+        "output": "Repeated USB device descriptor errors after update.",
+        "why": "The errors began after the update."
+      },
+      "drivers": {
+        "name": "Driver Status",
+        "description": "Inspect USB controller drivers.",
+        "output": "USB controller driver version changed after update.",
+        "why": "The driver change is a strong lead."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "driver",
+        "name": "USB driver issue"
+      },
+      {
+        "id": "key",
+        "name": "Broken USB key"
+      },
+      {
+        "id": "port",
+        "name": "Bad USB port"
+      },
+      {
+        "id": "network",
+        "name": "Network issue"
+      }
+    ],
+    "answer": "driver",
+    "explanation": "The device works elsewhere and multiple ports work. Device Manager and Event Viewer point toward the USB driver."
+  },
+  {
+    "id": "TKT-010",
+    "title": "Second Monitor Not Detected",
+    "area": "Hardware",
+    "difficulty": 1,
+    "user": "Lucas Meijer",
+    "department": "Finance",
+    "priority": "Low",
+    "description": "My second monitor suddenly says No Signal.",
+    "symptoms": [
+      "Primary monitor works.",
+      "Second monitor has power.",
+      "The same cable worked yesterday."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Did you reconnect the cable?",
+        "answer": "Yes.",
+        "why": "A loose connection is less likely."
+      },
+      {
+        "id": "q1",
+        "question": "Does Windows see the second display?",
+        "answer": "No, only one display appears.",
+        "why": "Investigate display detection."
+      }
+    ],
+    "tools": {
+      "display": {
+        "name": "Display Settings",
+        "description": "Detect connected displays.",
+        "output": "Display 1: Dell U2422\nDisplay 2: Not detected",
+        "why": "Windows does not detect the second display."
+      },
+      "device": {
+        "name": "Device Manager",
+        "description": "Check display adapters.",
+        "output": "Intel Graphics: Working properly",
+        "why": "The graphics adapter is working."
+      },
+      "dock": {
+        "name": "Dock Status",
+        "description": "Check docking station.",
+        "output": "Dock firmware: update available\nDisplayPort output: inactive",
+        "why": "The dock reports an inactive DisplayPort output."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "dock",
+        "name": "Dock/display output issue"
+      },
+      {
+        "id": "monitor",
+        "name": "Monitor hardware failure"
+      },
+      {
+        "id": "gpu",
+        "name": "Graphics adapter failure"
+      },
+      {
+        "id": "cable",
+        "name": "Bad cable"
+      }
+    ],
+    "answer": "dock",
+    "explanation": "The graphics adapter works and the monitor has power. The dock reports an inactive DisplayPort output."
+  },
+  {
+    "id": "TKT-011",
+    "title": "Password Expired",
+    "area": "Accounts",
+    "difficulty": 1,
+    "user": "Julia Kramer",
+    "department": "Legal",
+    "priority": "Medium",
+    "description": "I cannot sign in this morning. The message says my password has expired.",
+    "symptoms": [
+      "The account worked yesterday.",
+      "The login explicitly says password expired.",
+      "The user has their current password."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "What does the exact message say?",
+        "answer": "Your password has expired.",
+        "why": "The error message already provides a strong lead."
+      },
+      {
+        "id": "q1",
+        "question": "Can you access the password portal?",
+        "answer": "Yes.",
+        "why": "The account and network are reachable."
+      }
+    ],
+    "tools": {
+      "account": {
+        "name": "Account Status",
+        "description": "Inspect account.",
+        "output": "Account: Active\nPassword: Expired",
+        "why": "The account is active but the password is expired."
+      },
+      "policy": {
+        "name": "Password Policy",
+        "description": "Check expiry policy.",
+        "output": "Password maximum age: 90 days\nLast changed: 91 days ago",
+        "why": "The password exceeded the policy limit."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "expiry",
+        "name": "Password expired"
+      },
+      {
+        "id": "lock",
+        "name": "Account locked"
+      },
+      {
+        "id": "network",
+        "name": "Network failure"
+      },
+      {
+        "id": "server",
+        "name": "Authentication server failure"
+      }
+    ],
+    "answer": "expiry",
+    "explanation": "The account is active and the password is 91 days old under a 90-day policy."
+  },
+  {
+    "id": "TKT-012",
+    "title": "Application Crashes on Launch",
+    "area": "Applications",
+    "difficulty": 2,
+    "user": "Ruben Bos",
+    "department": "Engineering",
+    "priority": "Medium",
+    "description": "The accounting application closes immediately after I open it.",
+    "symptoms": [
+      "Other applications work.",
+      "Only this application crashes.",
+      "The application worked yesterday."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Do other applications work?",
+        "answer": "Yes.",
+        "why": "The OS is generally functioning."
+      },
+      {
+        "id": "q1",
+        "question": "Is there an error message?",
+        "answer": "It closes without showing one.",
+        "why": "Logs may contain more information."
+      }
+    ],
+    "tools": {
+      "event": {
+        "name": "Event Viewer",
+        "description": "Inspect application errors.",
+        "output": "Application Error: accounting.exe\nFaulting module: accounting.dll",
+        "why": "The crash identifies the application DLL."
+      },
+      "version": {
+        "name": "App Version",
+        "description": "Check application version.",
+        "output": "Version 5.4.1\nLatest approved version: 5.4.1",
+        "why": "The version is current."
+      },
+      "repair": {
+        "name": "App Repair",
+        "description": "Check installation integrity.",
+        "output": "Repair scan: accounting.dll corrupted",
+        "why": "The repair scan identifies a corrupted file."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "file",
+        "name": "Corrupted application file"
+      },
+      {
+        "id": "windows",
+        "name": "Windows failure"
+      },
+      {
+        "id": "hardware",
+        "name": "Hardware failure"
+      },
+      {
+        "id": "network",
+        "name": "Network outage"
+      }
+    ],
+    "answer": "file",
+    "explanation": "The application alone crashes and the repair scan identifies a corrupted accounting.dll."
+  },
+  {
+    "id": "TKT-013",
+    "title": "Windows Service Stopped",
+    "area": "Windows",
+    "difficulty": 2,
+    "user": "Peter Hoekstra",
+    "department": "Operations",
+    "priority": "High",
+    "description": "The internal scanning application cannot connect to its local agent.",
+    "symptoms": [
+      "The application says Agent Unavailable.",
+      "The network is working.",
+      "Other PCs can use the service."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Can the PC reach internal sites?",
+        "answer": "Yes.",
+        "why": "Basic network connectivity works."
+      },
+      {
+        "id": "q1",
+        "question": "Did restarting the application help?",
+        "answer": "No.",
+        "why": "Check the underlying service."
+      }
+    ],
+    "tools": {
+      "services": {
+        "name": "Services",
+        "description": "Check scanning agent.",
+        "output": "DocumentScannerAgent: Stopped\nStartup type: Automatic",
+        "why": "The required agent is stopped."
+      },
+      "logs": {
+        "name": "Service Logs",
+        "description": "Inspect recent service errors.",
+        "output": "Error: failed to bind local port 4512",
+        "why": "The service cannot bind its required port."
+      },
+      "port": {
+        "name": "Port Check",
+        "description": "Check local port.",
+        "output": "4512: LISTENING by old process scanner-helper.exe",
+        "why": "Another process owns the port."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "service",
+        "name": "Scanner service stopped/blocked"
+      },
+      {
+        "id": "network",
+        "name": "Network outage"
+      },
+      {
+        "id": "dns",
+        "name": "DNS failure"
+      },
+      {
+        "id": "hardware",
+        "name": "Network card failure"
+      }
+    ],
+    "answer": "service",
+    "explanation": "The network is fine, while the required agent is stopped and its port is occupied by another process."
+  },
+  {
+    "id": "TKT-014",
+    "title": "Wi-Fi Keeps Disconnecting",
+    "area": "Networking",
+    "difficulty": 2,
+    "user": "Milan de Wit",
+    "department": "Sales",
+    "priority": "Medium",
+    "description": "My laptop disconnects from Wi-Fi every few minutes.",
+    "symptoms": [
+      "Other users stay connected.",
+      "Ethernet is stable.",
+      "Wi-Fi disconnects every 5–10 minutes."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Does Ethernet stay connected?",
+        "answer": "Yes, all day.",
+        "why": "The issue is likely isolated to Wi-Fi."
+      },
+      {
+        "id": "q1",
+        "question": "Does it happen in other rooms?",
+        "answer": "Yes.",
+        "why": "Distance from one access point is less likely."
+      }
+    ],
+    "tools": {
+      "wifi": {
+        "name": "Wi-Fi Diagnostics",
+        "description": "Inspect adapter events.",
+        "output": "Adapter reset detected every 7 minutes.",
+        "why": "The adapter is repeatedly resetting."
+      },
+      "driver": {
+        "name": "Driver Version",
+        "description": "Check Wi-Fi driver.",
+        "output": "Driver version 22.80\nApproved version: 23.10",
+        "why": "The driver is outdated."
+      },
+      "signal": {
+        "name": "Signal Strength",
+        "description": "Check signal.",
+        "output": "Signal: Excellent -48 dBm",
+        "why": "Weak signal is not the cause."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "driver",
+        "name": "Outdated Wi-Fi driver"
+      },
+      {
+        "id": "signal",
+        "name": "Weak Wi-Fi signal"
+      },
+      {
+        "id": "internet",
+        "name": "Company internet outage"
+      },
+      {
+        "id": "ethernet",
+        "name": "Ethernet failure"
+      }
+    ],
+    "answer": "driver",
+    "explanation": "Signal strength is excellent and Ethernet works. The Wi-Fi adapter is repeatedly resetting and has an outdated driver."
+  },
+  {
+    "id": "TKT-015",
+    "title": "Suspicious Login Alert",
+    "area": "Security",
+    "difficulty": 3,
+    "user": "Anouk Peters",
+    "department": "Finance",
+    "priority": "Critical",
+    "description": "I received a security alert for a login from a location I do not recognize.",
+    "symptoms": [
+      "The alert arrived at 03:14.",
+      "User was asleep.",
+      "The login location is outside the Netherlands."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Did you perform this login?",
+        "answer": "No.",
+        "why": "This is potentially an account compromise."
+      },
+      {
+        "id": "q1",
+        "question": "Did you receive an MFA prompt?",
+        "answer": "Yes, twice, but I denied it.",
+        "why": "Repeated unexpected MFA prompts are suspicious."
+      }
+    ],
+    "tools": {
+      "logs": {
+        "name": "Sign-in Logs",
+        "description": "Inspect recent sign-ins.",
+        "output": "03:14 — Romania — Success\n03:16 — Romania — MFA denied",
+        "why": "There was a successful unknown login."
+      },
+      "sessions": {
+        "name": "Active Sessions",
+        "description": "Check active sessions.",
+        "output": "Unknown Windows session: Active",
+        "why": "An unknown session remains active."
+      },
+      "risk": {
+        "name": "Risk Detection",
+        "description": "Check account risk.",
+        "output": "Risk: HIGH\nImpossible travel detected",
+        "why": "The account is high risk."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "compromise",
+        "name": "Account compromise"
+      },
+      {
+        "id": "falsepositive",
+        "name": "Normal login / false positive"
+      },
+      {
+        "id": "vpn",
+        "name": "Company VPN caused location change"
+      },
+      {
+        "id": "password",
+        "name": "Password expiry"
+      }
+    ],
+    "answer": "compromise",
+    "explanation": "The user denies the login, an unknown session is active, and the sign-in system reports high risk and impossible travel."
+  },
+  {
+    "id": "TKT-016",
+    "title": "DNS Only One Website Fails",
+    "area": "Networking",
+    "difficulty": 2,
+    "user": "Sven Peters",
+    "department": "Marketing",
+    "priority": "Medium",
+    "description": "Every website works except our supplier portal.",
+    "symptoms": [
+      "Google and other websites work.",
+      "Only supplier.example fails.",
+      "Colleagues on the same network have the same issue."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Can colleagues open the supplier portal?",
+        "answer": "No, everyone gets the same error.",
+        "why": "This may not be a single-PC problem."
+      },
+      {
+        "id": "q1",
+        "question": "Does the portal require VPN?",
+        "answer": "Yes, it requires the company VPN.",
+        "why": "Check VPN/DNS rather than the browser."
+      }
+    ],
+    "tools": {
+      "dns": {
+        "name": "nslookup supplier.example",
+        "description": "Resolve supplier hostname.",
+        "output": "Name does not exist (NXDOMAIN).",
+        "why": "DNS is returning that the name does not exist."
+      },
+      "vpn": {
+        "name": "VPN Status",
+        "description": "Check tunnel.",
+        "output": "VPN: Connected",
+        "why": "The VPN tunnel is up."
+      },
+      "public": {
+        "name": "Public DNS Test",
+        "description": "Resolve using public resolver.",
+        "output": "supplier.example: NXDOMAIN",
+        "why": "The name fails outside the local network too."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "dns",
+        "name": "Supplier DNS/record problem"
+      },
+      {
+        "id": "browser",
+        "name": "Browser problem"
+      },
+      {
+        "id": "pc",
+        "name": "Single PC issue"
+      },
+      {
+        "id": "wifi",
+        "name": "Wi-Fi failure"
+      }
+    ],
+    "answer": "dns",
+    "explanation": "Multiple users are affected and both company and public DNS return NXDOMAIN. The supplier DNS record is the strongest lead."
+  },
+  {
+    "id": "TKT-017",
+    "title": "Laptop Battery Drains Quickly",
+    "area": "Hardware",
+    "difficulty": 2,
+    "user": "Fleur van Dam",
+    "department": "HR",
+    "priority": "Low",
+    "description": "My laptop battery is almost empty after an hour even though I barely use it.",
+    "symptoms": [
+      "Battery used to last 6 hours.",
+      "It now lasts about 1 hour.",
+      "The laptop is warm when idle."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Is the CPU high while idle?",
+        "answer": "Yes, around 70%.",
+        "why": "High idle usage can explain heat and battery drain."
+      },
+      {
+        "id": "q1",
+        "question": "Does it charge normally?",
+        "answer": "Yes.",
+        "why": "The charger is likely not the issue."
+      }
+    ],
+    "tools": {
+      "task": {
+        "name": "Task Manager",
+        "description": "Inspect processes.",
+        "output": "CPU: 72%\nTop process: backup-agent.exe 64%",
+        "why": "A backup process is consuming most CPU."
+      },
+      "battery": {
+        "name": "Battery Report",
+        "description": "Inspect battery health.",
+        "output": "Design capacity: 60Wh\nFull charge capacity: 58Wh",
+        "why": "Battery health is good."
+      },
+      "service": {
+        "name": "Backup Agent",
+        "description": "Check backup process.",
+        "output": "Backup running continuously for 2 hours",
+        "why": "A process is running far longer than expected."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "process",
+        "name": "Runaway backup process"
+      },
+      {
+        "id": "battery",
+        "name": "Worn battery"
+      },
+      {
+        "id": "charger",
+        "name": "Faulty charger"
+      },
+      {
+        "id": "screen",
+        "name": "Display brightness"
+      }
+    ],
+    "answer": "process",
+    "explanation": "Battery health is good. A backup process consuming 64% CPU is causing the heat and rapid drain."
+  },
+  {
+    "id": "TKT-018",
+    "title": "Cannot Install Software",
+    "area": "Permissions",
+    "difficulty": 2,
+    "user": "Kevin de Boer",
+    "department": "Sales",
+    "priority": "Medium",
+    "description": "I need to install a company-approved application, but Windows asks for administrator credentials.",
+    "symptoms": [
+      "The software is approved.",
+      "The user is not an administrator.",
+      "Other employees received the software through Company Portal."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Is the application available in Company Portal?",
+        "answer": "Yes.",
+        "why": "The managed installation route may avoid admin rights."
+      },
+      {
+        "id": "q1",
+        "question": "Are you a local administrator?",
+        "answer": "No.",
+        "why": "Manual installation may be restricted by policy."
+      }
+    ],
+    "tools": {
+      "whoami": {
+        "name": "whoami /groups",
+        "description": "Check privileges.",
+        "output": "Users: Standard User\nAdministrators: Not present",
+        "why": "The user has standard privileges."
+      },
+      "portal": {
+        "name": "Company Portal",
+        "description": "Check application deployment.",
+        "output": "Approved App: Available\nInstall: Requires no elevation",
+        "why": "The approved route is available."
+      },
+      "policy": {
+        "name": "Application Policy",
+        "description": "Inspect policy.",
+        "output": "Unmanaged MSI installs: Blocked",
+        "why": "The policy blocks unmanaged installers."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "portal",
+        "name": "Install through Company Portal"
+      },
+      {
+        "id": "malware",
+        "name": "Software is blocked as malware"
+      },
+      {
+        "id": "admin",
+        "name": "Give user permanent admin rights"
+      },
+      {
+        "id": "windows",
+        "name": "Windows installation broken"
+      }
+    ],
+    "answer": "portal",
+    "explanation": "The organization blocks unmanaged installers. The approved application is already available through Company Portal."
+  },
+  {
+    "id": "TKT-019",
+    "title": "File Deleted by User",
+    "area": "Data Recovery",
+    "difficulty": 2,
+    "user": "Lisa Jansen",
+    "department": "Finance",
+    "priority": "High",
+    "description": "I accidentally deleted an important spreadsheet from the shared Finance folder.",
+    "symptoms": [
+      "The file was deleted this morning.",
+      "The shared folder still works.",
+      "Other files are present."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Did you check the Recycle Bin?",
+        "answer": "Yes, it is not there.",
+        "why": "Check server-side recovery."
+      },
+      {
+        "id": "q1",
+        "question": "Do you know the exact filename?",
+        "answer": "Budget-2026.xlsx.",
+        "why": "The exact name helps locate backups/version history."
+      }
+    ],
+    "tools": {
+      "versions": {
+        "name": "Version History",
+        "description": "Check previous versions.",
+        "output": "Budget-2026.xlsx\nLast version: 09:42 today",
+        "why": "A current version is available."
+      },
+      "backup": {
+        "name": "Backup System",
+        "description": "Check backup status.",
+        "output": "Nightly backup: Successful\nLast backup: 02:00",
+        "why": "A backup exists but is older."
+      },
+      "permissions": {
+        "name": "Folder Permissions",
+        "description": "Check restore rights.",
+        "output": "User: Read/Modify\nRestore: IT Admin only",
+        "why": "Restoration requires IT admin rights."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "version",
+        "name": "Restore previous version"
+      },
+      {
+        "id": "backup",
+        "name": "Restore from backup"
+      },
+      {
+        "id": "recreate",
+        "name": "Recreate the spreadsheet"
+      },
+      {
+        "id": "server",
+        "name": "Shared drive failure"
+      }
+    ],
+    "answer": "version",
+    "explanation": "Version history has a copy from 09:42 today, making it the fastest and least destructive recovery option."
+  },
+  {
+    "id": "TKT-020",
+    "title": "PC Cannot Join Company Network",
+    "area": "Networking",
+    "difficulty": 3,
+    "user": "Owen Bakker",
+    "department": "Engineering",
+    "priority": "High",
+    "description": "A newly issued laptop connects to Wi-Fi but cannot access internal company resources.",
+    "symptoms": [
+      "Internet websites work.",
+      "Internal resources do not.",
+      "The laptop is new and was just enrolled."
+    ],
+    "questions": [
+      {
+        "id": "q0",
+        "question": "Can you reach public websites?",
+        "answer": "Yes.",
+        "why": "The local network and internet are working."
+      },
+      {
+        "id": "q1",
+        "question": "Was the laptop recently enrolled?",
+        "answer": "Yes, today.",
+        "why": "Device management/network policy may not have finished applying."
+      }
+    ],
+    "tools": {
+      "ipconfig": {
+        "name": "ipconfig /all",
+        "description": "Inspect network configuration.",
+        "output": "IPv4: 10.20.44.15\nDNS: 8.8.8.8\nDomain DNS expected: 10.20.0.53",
+        "why": "The laptop is using public DNS instead of company DNS."
+      },
+      "dns": {
+        "name": "nslookup intranet.company.local",
+        "description": "Resolve internal resource.",
+        "output": "Server: 8.8.8.8\n*** intranet.company.local not found",
+        "why": "Internal DNS cannot resolve the company hostname."
+      },
+      "mdm": {
+        "name": "Device Management",
+        "description": "Check policy state.",
+        "output": "Enrollment: Complete\nNetwork profile: Pending",
+        "why": "The managed network profile has not applied."
+      },
+      "routes": {
+        "name": "route print",
+        "description": "Inspect routes.",
+        "output": "No route to 10.20.0.0/16",
+        "why": "There is no route to the internal network."
+      }
+    },
+    "hypotheses": [
+      {
+        "id": "policy",
+        "name": "Network policy/profile has not applied"
+      },
+      {
+        "id": "wifi",
+        "name": "Wi-Fi hardware issue"
+      },
+      {
+        "id": "internet",
+        "name": "Internet outage"
+      },
+      {
+        "id": "server",
+        "name": "Intranet server outage"
+      }
+    ],
+    "answer": "policy",
+    "explanation": "Public internet works, but the laptop uses public DNS and has no route to the internal network. The managed network profile is still pending."
+  }
+]

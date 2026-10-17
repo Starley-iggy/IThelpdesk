@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IT Helpdesk Simulator</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="top">
+  <div><span>IT OPERATIONS / TRAINING</span><h1>Helpdesk Simulator</h1></div>
+  <div class="stats">
+    <div><small>LEVEL</small><b id="level">1</b></div>
+    <div><small>XP</small><b id="xp">0</b></div>
+    <div><small>REP</small><b id="rep">0</b></div>
+  </div>
+</header>
+
+<main>
+<aside>
+  <div class="sidehead">TICKETS <em id="count">20</em></div>
+  <input id="search" placeholder="Search tickets..." oninput="renderTickets()">
+  <div id="tickets"></div>
+</aside>
+
+<section class="work">
+  <div id="empty" class="empty">
+    <h2>Select a ticket</h2>
+    <p>Think like a technician: observe → ask → investigate → form a hypothesis → explain your reasoning.</p>
+  </div>
+
+  <div id="ticket" class="hidden">
+    <div class="headrow">
+      <div>
+        <small id="id"></small>
+        <h2 id="title"></h2>
+        <div id="meta"></div>
+      </div>
+      <div id="difficulty"></div>
+    </div>
+
+    <div class="user">
+      <div id="avatar"></div>
+      <div><b id="user"></b><small id="dept"></small></div>
+    </div>
+
+    <div class="reported">
+      <b>USER REPORT</b>
+      <p id="description"></p>
+    </div>
+
+    <div class="stage">
+      <div class="stagehead"><strong>01</strong><div><h3>Observe</h3><p>Separate facts from assumptions.</p></div></div>
+      <ul id="symptoms"></ul>
+    </div>
+
+    <div class="stage">
+      <div class="stagehead"><strong>02</strong><div><h3>Ask the user</h3><p>Gather information before changing anything.</p></div></div>
+      <div id="questions"></div>
+    </div>
+
+    <div class="stage">
+      <div class="stagehead"><strong>03</strong><div><h3>Investigate</h3><p>Choose tests that reduce uncertainty.</p></div></div>
+      <div id="tools" class="grid"></div>
+      <div id="evidence" class="evidence hidden"></div>
+    </div>
+
+    <div class="stage">
+      <div class="stagehead"><strong>04</strong><div><h3>Form a hypothesis</h3><p>Pick the explanation best supported by your evidence.</p></div></div>
+      <div id="hypotheses" class="grid"></div>
+    </div>
+
+    <div class="stage">
+      <div class="stagehead"><strong>05</strong><div><h3>Explain your reasoning</h3><p>Don't just tell me the answer. Explain how the evidence led you there.</p></div></div>
+      <textarea id="reasoning" placeholder="Example: I think this is a DNS problem because..."></textarea>
+      <button class="submit" onclick="submitCase()">Submit diagnosis</button>
+    </div>
+
+    <div id="feedback" class="feedback hidden"></div>
+  </div>
+</section>
+</main>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
